@@ -9,6 +9,8 @@ const DashboardMain = dynamic(() => import("./Comps/DashboardComp"))
 const Items = dynamic(() => import("./Comps/ItemsComp"))
 const Checkouts = dynamic(() => import("./Comps/CheckoutsComp"))
 
+
+
 export default function Dashboard(){
 
     const [activeComponent, setComponent] = useState("dashboard")
@@ -18,7 +20,7 @@ export default function Dashboard(){
     // Hamburger menu button
     const toggleMenu = () => {
         setMenuState(!menuActive)
-        console.log(menuActive)
+        // console.log(menuActive)
     }
 
     const navData = [
@@ -51,37 +53,40 @@ export default function Dashboard(){
 
     return(
         <>
-        <div className=" min-h-screen">
+        <div className="min-h-screen">
             <header className="w-full z-10 fixed">
                 <div className=" bg-header-color min-h-header w-full">
 
                 </div>
+            </header>
 
-                <div className={`min-h-screen bg-white ${menuActive ? 'w-sidebar' : 'w-sidebar-min'} transition-[width] ease-in-out duration-300`}>
-                    <button onClick={toggleMenu} className="p-5">
-                        <Image src="/Icons/list.svg"
-                                width={39}
-                                height={39}
-                                alt="list-icon"/>
-                    </button>
-                    <nav className={`flex flex-col p-5 space-y-5`}>
-                        {navData.map((n, i) => (
-                            <button key={i} className={`rounded-lg flex flex-row py-4 text-black items-center ${menuActive ? 'justify-start px-5' : 'px-2'} transition-[padding] transition-[transform] ease-in-out duration-300 hover:bg-gray-400 hover:-translate-y-4`} onClick={() => setComponent(n.component)}>
-                                <Image src={n.navIcon}
+            <main className="flex flex-row min-h-screen">
+                    <div className={`min-h-screen bg-white ${menuActive ? 'w-sidebar' : 'w-sidebar-min'} mt-[7.0rem]  transition-[width] ease-in-out duration-300 fixed`}>
+                        <button onClick={toggleMenu} className="p-5">
+                            <Image src="/Icons/list.svg"
                                     width={39}
                                     height={39}
                                     alt="list-icon"/>
-                                <h1 className={`${menuActive ? 'visible ml-4' : 'hidden'} transition-[visibility] ease-in-out duration-300`}>{n.navName}</h1>
-                            </button>
-                        ))}
-                    </nav>
-                </div>
-            </header>
+                        </button>
+                        <nav className={`flex flex-col p-5 space-y-5`}>
+                            {navData.map((n, i) => (
+                                <button key={i} className={`rounded-lg flex flex-row py-4 text-black items-center ${menuActive ? 'justify-start px-5' : 'px-2'} transition-all ease-in-out duration-300 hover:bg-gray-400 hover:-translate-y-4`} onClick={() => setComponent(n.component)}>
+                                    <Image src={n.navIcon}
+                                        width={39}
+                                        height={39}
+                                        alt="list-icon"/>
+                                    <h1 className={`${menuActive ? 'visible ml-4' : 'hidden'} transition-[visibility] ease-in-out duration-300`}>{n.navName}</h1>
+                                </button>
+                            ))}
+                        </nav>
+                    </div>
 
-            <main className="flex flex-row min-h-screen w-full">
-                <div className="min-h-screen w-full bg-dashboard-body text-black p-5">
+                <div className="min-h-screen w-full float-left bg-dashboard-body text-black p-5">
                         {/* Content */}
                         {/* <h1 className="text-black">Hello</h1> */}
+                        <button>
+                            hi
+                        </button>
                         {(() => {
                             switch(activeComponent){
                                 case "dashboard":

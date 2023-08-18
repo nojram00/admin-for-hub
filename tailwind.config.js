@@ -33,7 +33,8 @@ module.exports = {
       },
       margin: {
         'content': '7.5rem',
-        'content-full' : '8.5rem'
+        'content-full' : '8.5rem',
+        'sidebar-top' : ''
       }
 
     },

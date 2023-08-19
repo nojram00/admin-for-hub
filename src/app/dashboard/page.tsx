@@ -83,10 +83,7 @@ export default function Dashboard(){
 
                 <div className="min-h-screen w-full float-left bg-dashboard-body text-black p-5">
                         {/* Content */}
-                        {/* <h1 className="text-black">Hello</h1> */}
-                        <button>
-                            hi
-                        </button>
+
                         {(() => {
                             switch(activeComponent){
                                 case "dashboard":

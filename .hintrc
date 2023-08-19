@@ -15,6 +15,7 @@
         "button-name": "off"
       }
     ],
-    "typescript-config/is-valid": "off"
+    "typescript-config/is-valid": "off",
+    "button-type": "off"
   }
 }

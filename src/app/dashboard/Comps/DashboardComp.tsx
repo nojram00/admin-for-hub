@@ -1,16 +1,3 @@
-// 'use server'
-
-// export const getStaticProps = async () => {
-//     const res = await fetch(`https://google.com`)
-//     const data = await res.text()
-
-//     return {
-//         props: { data : data}
-//     }
-// }
-
-
-
 'use client'
 import { useEffect, useState } from "react";
 
@@ -30,10 +17,10 @@ export default function DashboardComp(props: { name: any; menuActive: any;}){
 
     return(
         <div className={`${menuActive ? 'w-body' : 'w-content'} mt-content min-h-screen float-right overflow-auto`}>
-            <h1>{name}</h1>
-            <button>
-                Hello
-            </button>
+            <div className="top-52 w-full h-[50px] outline outline-blue-400">
+                <h1 className="uppercase text-2xl font-bold px-5">{name}</h1>
+            </div>
+
         </div>
     );
 }

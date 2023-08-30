@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientCon from "../../../../config/mongodb.config";
 
-type SearchParams = {
-    name: string,
-    quantity: number,
-    price: number,
-    description: string
-}
-
 export async function POST( req: NextRequest){
 
     const name = req.nextUrl.searchParams.get('name');

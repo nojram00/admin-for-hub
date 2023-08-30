@@ -6,8 +6,12 @@ export async function GET(req : NextRequest){
 
     const db = client.db('hub_new_db')
 
+    const category = req.nextUrl.searchParams.get('category')
+    const catParam = category === null ?  {} : {category}
+
+    // console.log(category)
     const items = await db.collection('items')
-                        .find({})
+                        .find(catParam)
                         .toArray()
 
     return NextResponse.json(items)

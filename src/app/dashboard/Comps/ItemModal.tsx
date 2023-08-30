@@ -33,6 +33,12 @@ export default function ItemModal(props: { menuActive: any; active: any;}){
                 },
             })
             console.log(submit)
+            if(submit.ok)
+            {
+                return(<>
+                    <h1>Submitted Successfully</h1>
+                </>)
+            }
         }
         catch (err) {
             console.error(err)
@@ -40,8 +46,25 @@ export default function ItemModal(props: { menuActive: any; active: any;}){
         }
     }
 
-    const category = ['ram', 'motherboard', 'monitor', 'hard drive']
+    // const category = ['ram', 'motherboard', 'monitor', 'hard drive']
+    // let category: any = []
+    const [categories, setCategories] = useState<any[]>([])
 
+    const fetchCategories = async () => {
+        const c = await fetch('/api/categories')
+        const categories = await c.json()
+
+        //it should be return as an array, not a promise
+        return categories
+    }
+
+    useEffect(() => {
+       const getcategories = async () => {
+            const cat = await fetchCategories()
+            setCategories(cat);
+       }
+       getcategories()
+    }, [])
 
     return (
         <div className={`fixed rounded-3xl ${props.menuActive ? 'w-[65vw]' : 'w-[80vw]'} h-[75vh] bottom-20 right-52 ${props.active ? 'bg-white visible' : 'bg-transparent invisible'} transition-all ease-in-out duration-300 p-10`}>
@@ -63,9 +86,9 @@ export default function ItemModal(props: { menuActive: any; active: any;}){
                         <label htmlFor="">Type</label>
                         {/* <input type="text" name="" id="" className="bg-black outline-blue-400 p-5 rounded-3xl  text-white"/> */}
                         <select name="category" id="" value={selectedCategory} onChange={handleSelectedCategory}>
-                            <option value="">Select A category</option>
-                            {category.map((c, i) => (
-                                <option value={c} key={i}>{c}</option>
+                            <option value="">Select a category</option>
+                            {categories.map((c, i) => (
+                                <option value={c.category} key={i}>{c.category}</option>
                             ))}
                         </select>
                     </div>

@@ -47,13 +47,14 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
 
     const fetchItems = async () => {
         let d:any = []
-        await fetch("http://127.0.0.1:8080/api/getItems", { next : {revalidate : 10}})
+        await fetch("/api/items", { next : {revalidate : 10}})
                 .then(res => res.json())
                 .then(data => {
                     data.forEach((item: any) => {
                         d.push(item)
                     });
                     // setTimeout(fetchItems, 10000)
+                    // console.log(d)
                 })
                 .catch(err => console.error(err))
                 setItems(d)
@@ -66,13 +67,13 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
             category: 'sample din',
         }
     ]
-    const lols = () => setItems(dummy_data)
+    // const lols = () => setItems(dummy_data)
     useEffect(() => {
 
         // wag mo tangalin
-        lols()
+        // lols()
 
-       // fetchItems();
+       fetchItems();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -99,7 +100,7 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
                         <tr key={index} className="">
                             <td>
                                 <div className="p-5 bg-gray-300 my-1 mx-2 rounded-md py-[26px]">
-                                    {item.name}
+                                    {item?.name}
                                 </div>
                             </td>
                             <td className="text-center">

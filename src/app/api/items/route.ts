@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import clientCon from "../../../../config/mongodb.config";
 
 export async function GET(req : NextRequest){
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+    };
     const client = await clientCon
+    // const response = new NextResponse(null, {headers})
 
     const db = client.db('hub_new_db')
 
@@ -14,5 +19,6 @@ export async function GET(req : NextRequest){
                         .find(catParam)
                         .toArray()
 
-    return NextResponse.json(items)
+
+    return NextResponse.json(items, {headers});
 }

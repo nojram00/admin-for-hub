@@ -3,25 +3,31 @@ import clientCon from "../../../../config/mongodb.config";
 
 export async function POST( req: NextRequest){
 
-    const name = req.nextUrl.searchParams.get('name');
-    const quantity = req.nextUrl.searchParams.get('quantity');
-    const price = req.nextUrl.searchParams.get('price');
-    const description = req.nextUrl.searchParams.get('description');
-    const category = req.nextUrl.searchParams.get('category');
+
+    const bodyText = await req.text()
+    const data = JSON.parse(bodyText)
 
     const client = await clientCon
     const  db = client.db('hub_new_db')
 
-    const addItem = await db.collection('items')
+    // const name = req.query.name as string
+    // console.log(name)
+
+        const addItem = await db.collection('items')
                     .insertOne({
-                        name: name,
-                        quantity: quantity,
-                        price: price,
-                        description: description,
-                        category: category
+                        data
                     })
 
     return NextResponse.json(addItem)
+
+
+    // return res.json({message: 'wow'})
+
 }
+
+
+
+
+
 
 

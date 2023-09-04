@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from "react";
-
+import Image from "next/image";
+import { convert } from '../../../../lib/base64'
 
 export default function ItemModal(props: { menuActive: any; active: any;}){
 
@@ -9,6 +10,7 @@ export default function ItemModal(props: { menuActive: any; active: any;}){
     const [quantity, setQuantity] = useState<number>(0)
     const [price, setPrice] = useState<number>(0)
     const [desc, setDesc] = useState<string>('')
+    const [b64Img, setb64Img] = useState<any>()
 
     const [selectedCategory, setSelectedCategory] = useState('')
 
@@ -21,16 +23,19 @@ export default function ItemModal(props: { menuActive: any; active: any;}){
         quantity: quantity,
         price: price,
         description: desc,
-        category: selectedCategory
+        category: selectedCategory,
+        image: b64Img,
     }
+
 
     const submitForm = async () => {
         try {
-            const submit = await fetch(`/api/addItems?name=${itemName}&quantity=${quantity}&price=${price}&category=${selectedCategory}&description=${desc}`, {
+            const submit = await fetch(`/api/addItems`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                body: JSON.stringify(ItemToAdd)
             })
             console.log(submit)
             if(submit.ok)
@@ -46,6 +51,8 @@ export default function ItemModal(props: { menuActive: any; active: any;}){
         }
     }
 
+
+
     // const category = ['ram', 'motherboard', 'monitor', 'hard drive']
     // let category: any = []
     const [categories, setCategories] = useState<any[]>([])
@@ -54,8 +61,18 @@ export default function ItemModal(props: { menuActive: any; active: any;}){
         const c = await fetch('/api/categories')
         const categories = await c.json()
 
-        //it should be return as an array, not a promise
         return categories
+    }
+
+
+
+    const handleImage = async (e: any) => {
+        const file = e.target.files[0];
+        if(file){
+            const b64Image = await convert(file)
+            // console.log(b64Image)
+            setb64Img(b64Image)
+        }
     }
 
     useEffect(() => {
@@ -93,12 +110,17 @@ export default function ItemModal(props: { menuActive: any; active: any;}){
                         </select>
                     </div>
                     <div className="flex-row space-x-16 justify-center items-center">
+                       <input type="file" name="image" id="" accept="image/**" onChange={handleImage}/>
+                    </div>
+                    <div className="flex-row space-x-16 justify-center items-center">
                         <textarea name="description" id="" cols={30} rows={10} className={`bg-black w-[40vw] outline-blue-400 p-5 text-white rounded-md`} placeholder="Enter description"></textarea>
                     </div>
                     <div className="flex-row self-center">
                         <button type="submit" className={`py-4 px-10 bg-blue-400 rounded-lg`} onClick={submitForm}>Add</button>
                     </div>
                 </div>
+                {/* <Image src={b64Img} width={120} height={120} alt="wews"/> */}
+                {/* {img && <Image src={imgURL} width={120} height={120} alt="wews"/>} */}
             </div>
         </div>
     )

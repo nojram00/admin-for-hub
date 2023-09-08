@@ -1,25 +1,17 @@
 'use client'
 
 import Image from "next/image"
-import { useEffect, useState } from "react"
-export default function ItemDetails(props : {isModalActive : boolean, image: string }){
+import { useEffect } from "react"
+export default function ItemDetails(props : {image: string }){
 
-    const [isActive, setModal] = useState<boolean>(props.isModalActive)
-    // useEffect(() => {
-    //     setModal(props.isModalActive)
-    // },[props.isModalActive])
-
+    useEffect(() => {
+        console.log(props.image)
+    }, [props.image])
 
     return(
-        <div className={`${props.isModalActive ? 'block' : 'hidden'} bg-gray-400 w-[77vw] h-[70vh] fixed top-52`}>
-            <button className="float-right p-5 text-lg" onClick={() => {
-                setModal(!isActive)
-                // props.isModalActive = isActive
-                console.log(props.isModalActive)
-            }}>close</button>
-            <div className="p-5 mt-10">
-                <h1>LOLS!!!</h1>
-                <Image src={props.image} alt="image" width={200} height={300}/>
+        <div>
+            <div className="p-5 mt-10 flex bg-white justify-center w-[vw]">
+                <Image src={props.image} alt="image" width={300} height={200}/>
             </div>
         </div>
     )

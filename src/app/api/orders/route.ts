@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientCon from "../../../../config/mongodb.config";
-import { NextApiRequest } from "next";
 
 
-export async function GET(req : NextApiRequest){
+export async function GET(req : NextRequest){
     const client = await clientCon
     const db = client.db('hub_new_db')
 

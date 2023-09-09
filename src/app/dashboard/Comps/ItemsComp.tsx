@@ -2,8 +2,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import ItemModal from "./ItemModal";
-import ItemDetails from "./ItemDetailModal";
 import { convert } from '../../../../lib/base64'
 import { Button, Modal } from "react-bootstrap";
 import swal from "sweetalert";

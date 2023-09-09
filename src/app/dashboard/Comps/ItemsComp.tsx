@@ -52,8 +52,6 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
                     data.forEach((item: any) => {
                         d.push(item)
                     });
-                    // setTimeout(fetchItems, 10000)
-                    // console.log(d)
                 })
                 .catch(err => console.error(err))
                 setItems(d)
@@ -62,15 +60,6 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
     //handle Item Details:
     const [itmdetShow, setitmdetShow] = useState(false)
     const handleItemDetails = () => setitmdetShow(!itmdetShow)
-
-    // const dummy_data: Items[] =[
-    //     {
-    //         name:'sample',
-    //         quantity: 5,
-    //         category: 'sample din',
-    //     }
-    // ]
-    // const lols = () => setItems(dummy_data)
     useEffect(() => {
 
         // wag mo tangalin
@@ -202,6 +191,71 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
 
     //End
 
+    //Delete Item
+    const deleteItem = async () => {
+        await fetch(`/api/deleteItems/${itemId}`).then((res: any) => {
+            if(res.ok){
+                deleteSuccess()
+            }else{
+                deleteFailed()
+            }
+        })
+    }
+
+    //Handle Success SweetAlert
+    const deletePrompt = () => {
+        swal({
+            title: `Are you sure you want to delete this?\n id: ${itemId}`,
+            icon: 'warning',
+            buttons: {
+                Yes : {
+                    text : "Yes",
+                    value: 'Yes'
+                },
+                No : {
+                    text : "No",
+                    value : 'No'
+                }
+            }
+        }).then((value:any) => {
+            if(value === 'Yes'){
+                deleteItem()
+            }else{
+                return
+            }
+        })
+    }
+
+    const deleteSuccess = () =>{
+        swal({
+            title: "Item deleted",
+            icon: 'success',
+            buttons: {
+                Ok: {
+                    text: "Ok"
+                }
+            }
+        }).then(() => {
+            setitmdetShow(false)
+            fetchItems()
+        })
+    }
+
+    const deleteFailed = () => {
+        swal({
+            title: "Deleting Failed",
+            icon: 'error',
+            buttons: {
+                Ok: {
+                    text: "Ok"
+                }
+            }
+        }).then(() => {
+            fetchItems()
+        })
+    }
+    //end
+
     return(
         <div className={`${menuActive ? 'w-body' : 'w-content'} mt-content min-h-screen float-right overflow-auto z-30`}>
             <div className="top-52 w-full h-[50px] outline outline-blue-400">
@@ -265,6 +319,14 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
                                     setItemDesc(item?.data?.description)
                                 }}>View Details</button>
                             </td>
+                            {/* <td>
+                                <button onClick={() => {
+                                    setItemId(item._id)
+                                    deletePrompt()
+                                    }}>
+                                    Delete
+                                </button>
+                            </td> */}
                         </tr>
                     )) }
                 </tbody>

@@ -48,8 +48,9 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
         await fetch("/api/items", { next : {revalidate : 10}})
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
+                    // console.log(data._id) //undefined
                     data.forEach((item: any) => {
+                        // console.log(item._id)
                         d.push(item)
                     });
                 })

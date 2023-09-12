@@ -7,6 +7,7 @@ import { Button, Modal } from "react-bootstrap";
 import swal from "sweetalert";
 
 type Items = {
+    _id: string;
     data : {
         name: string;
         quantity: number;
@@ -15,6 +16,7 @@ type Items = {
         description: string;
     }
 }
+
 
 export default function ItemsComponent(props: { name: any; menuActive: any }){
     const name = props.name
@@ -72,6 +74,7 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
     }, [])
 
 
+    const [itemId, setItemId] = useState<string>('')
     const [itemDetailState, setItemDetailState] = useState<boolean>(false)
     const [itemImage, setItemImage] = useState<string>('')
     const [itemDesc, setItemDesc] = useState<string>('')
@@ -140,26 +143,21 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
         }, [addItemState])
 
         const submitForm = async () => {
-            try {
-                const submit = await fetch(`/api/addItems`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(ItemToAdd)
-                })
-                console.log(submit)
-                if(submit.ok)
-                {
+            await fetch(`/api/addItems`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(ItemToAdd)
+            }).then((res) => {
+                if(res.ok){
                     addSuccess()
                 }else{
                     addFailed()
                 }
-            }
-            catch (err) {
+            }).catch((err) => {
                 console.error(err)
-                return
-            }
+            })
         }
 
         const [categories, setCategories] = useState<any[]>([])
@@ -318,6 +316,8 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
                                     handleItemDetails()
                                     setItemImage(item.data?.image)
                                     setItemDesc(item?.data?.description)
+                                    setItemId(item?._id)
+                                    // console.log("Item id: ", item._id)
                                 }}>View Details</button>
                             </td>
                             {/* <td>
@@ -341,15 +341,22 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
                     <Modal.Body>
                         {/* <ItemDetails image={itemImage}/> */}
                         <div className="p-5 ml-5 rounded-md mb-3 flex flex-col items-center bg-white justify-around">
-                            <Image src={itemImage} alt="image" width={300} height={300}/>
+                            <Image src={itemImage == null ? '/hub.svg' : itemImage} alt="image" width={300} height={300}/>
                             <div className="text-black mt-5">
                                 <h1 className=" font-bold text-2xl">Description</h1>
                                 <p>{itemDesc}</p>
+                                <p>Item id: {itemId}</p>
                             </div>
                         </div>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" className="text-black float-right mr-5 bg-white text-2xl p-2 rounded-md" onClick={handleItemDetails}>Close</Button>
+                        <Button className="text-black float-right mr-5 bg-white text-2xl p-2 rounded-md" onClick={() => {
+                                    setItemId(itemId)
+                                    deletePrompt()
+                                    }}>
+                                    Delete
+                            </Button>
                     </Modal.Footer>
                 </Modal>
 

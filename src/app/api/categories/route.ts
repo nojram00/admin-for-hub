@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientCon from "../../../../config/mongodb.config";
+import headers from "../../../../lib/apiHeader";
 
 export async function GET(req: NextRequest) {
     const client = await clientCon
@@ -10,5 +11,5 @@ export async function GET(req: NextRequest) {
                         .find({})
                         .toArray()
     // console.log(categories)
-    return NextResponse.json(categories)
+    return NextResponse.json(categories, {headers})
 }

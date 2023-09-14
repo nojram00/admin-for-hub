@@ -62,19 +62,19 @@ export default function Dashboard(){
 
             <main className="flex flex-row min-h-screen">
                     <div className={`min-h-screen bg-white ${menuActive ? 'w-sidebar' : 'w-sidebar-min'} mt-[7.0rem]  transition-[width] ease-in-out duration-300 fixed`}>
-                        <button onClick={toggleMenu} className="p-5">
+                        <button onClick={toggleMenu} className="p-2 mt-3 ml-2">
                             <Image src="/Icons/list.svg"
                                     width={39}
                                     height={39}
                                     alt="list-icon"/>
                         </button>
-                        <nav className={`flex flex-col p-5 space-y-5`}>
+                        <nav className={`flex flex-col p-3 space-y-2`}>
                             {navData.map((n, i) => (
                                 <button key={i} className={`rounded-lg flex flex-row py-4 text-black items-center ${menuActive ? 'justify-start px-5' : 'px-2'} transition-all ease-in-out duration-300 hover:bg-gray-400 hover:-translate-y-4`} onClick={() => setComponent(n.component)}>
                                     <Image src={n.navIcon}
                                         width={39}
                                         height={39}
-                                        alt="list-icon"/>
+                                        alt="list-icon" className="visible"/>
                                     <h1 className={`${menuActive ? 'visible ml-4' : 'hidden'} transition-[visibility] ease-in-out duration-300`}>{n.navName}</h1>
                                 </button>
                             ))}

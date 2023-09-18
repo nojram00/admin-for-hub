@@ -91,6 +91,7 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
         const [price, setPrice] = useState<number>(0)
         const [desc, setDesc] = useState<string>('')
         const [b64Img, setb64Img] = useState<any>()
+        const [compatibility, setCompatibility] = useState<string | string[]>()
 
         const [selectedCategory, setSelectedCategory] = useState('')
 
@@ -98,12 +99,22 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
             setSelectedCategory(e.target.value)
         }
 
+        const handleCompatibility = (e : any) => {
+
+            setCompatibility(e.target.value.split(','))
+            // console.log(compatibility)
+        }
+        useEffect (() => {
+            console.log(compatibility)
+        }, [compatibility])
+
         const ItemToAdd = {
             name : itemName,
             quantity: quantity,
             price: price,
             description: desc,
             category: selectedCategory,
+            compatibility: compatibility,
             image: b64Img,
         }
 
@@ -143,6 +154,8 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
         }, [addItemState])
 
         const submitForm = async () => {
+            // console.log("items: ",ItemToAdd)
+            console.log("Compatibility: ", compatibility)
             await fetch(`/api/addItems`, {
                 method: 'POST',
                 headers: {
@@ -260,7 +273,7 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
             <div className="top-52 w-full h-[50px] outline outline-blue-400">
                 <h1 className="uppercase text-2xl font-bold px-5">{name}</h1>
                 <div className="float-right px-5">
-                    <button className="m-10 p-5 rounded-3xl bg-slate-950 text-white transition-all" onClick={buttonClick}>
+                    <button className="m-10 p-4 px-10 rounded-md bg-slate-950 text-white" onClick={buttonClick}>
                         {/* {message} */}
                         Add
                     </button>
@@ -334,9 +347,11 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
             </table>
             {/* Item Detail Modal: */}
 
-                <Modal show={itmdetShow} className="fixed bg-gray-400 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg w-[70vw] h-[70vh]">
+                <Modal show={itmdetShow} onHide={handleItemDetails} className="rounded-lg">
                     <Modal.Header closeButton>
-                        <h1 className="p-5">Item Details</h1>
+                        <Modal.Title>
+                            <h1 className="p-2 text-black text-4xl font-bold">Item Details</h1>
+                        </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {/* <ItemDetails image={itemImage}/> */}
@@ -346,12 +361,13 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
                                 <h1 className=" font-bold text-2xl">Description</h1>
                                 <p>{itemDesc}</p>
                                 <p>Item id: {itemId}</p>
-                            </div>
-                        </div>
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" className="text-black float-right mr-5 bg-white text-2xl p-2 rounded-md" onClick={handleItemDetails}>Close</Button>
-                        <Button className="text-black float-right mr-5 bg-white text-2xl p-2 rounded-md" onClick={() => {
+                        <Button variant="primary" className="text-black float-right mr-5 text-2xl p-2 rounded-md" onClick={handleItemDetails}>Close</Button>
+                        <Button variant="danger" className="text-black float-right mr-5 text-2xl p-2 rounded-md" onClick={() => {
                                     setItemId(itemId)
                                     deletePrompt()
                                     }}>
@@ -361,9 +377,11 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
                 </Modal>
 
             {/* Add Item Modal */}
-            <Modal show={addItemState} className="fixed bg-gray-400 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg w-[70vw] h-[80vh] z-30">
-                <Modal.Header className="max-h-[10vh]">
-                    <h1 className="p-5">Add Item</h1>
+            <Modal show={addItemState} className="rounded-lg">
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        <h1 className="p-2 text-black text-4xl font-bold">Add Item</h1>
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="max-h-[60vh] overflow-y-visible overflow-x-hidden">
                     {/* <ItemModal/> */}
@@ -376,11 +394,14 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
                         <div className="flex-row space-x-10 my-2">
                             {/* Quantity */}
                             <label htmlFor="quantity">Quantity</label>
-                            <input type="number" name="quantity" id="" className="bg-black outline-blue-400 p-5 rounded-3xl text-white" value={quantity} onChange={e => setQuantity(Number(e.target.value))}/>
-                        </div>
-                        <div className="flex-row space-x-16 my-2">
-                            {/* Price */}
-                            <label htmlFor="price">Price</label>
+                            </Col>
+                            <Col>
+                                <input type="number" name="quantity" id="quantity" className="bg-black outline-blue-400 p-2 rounded-md text-white" value={quantity} onChange={e => setQuantity(Number(e.target.value))}/>
+                            </Col>
+                        </Row>
+                        <Row className="my-2">
+                            <Col>
+                                <label htmlFor="price">Price</label>
                             <input type="number" name="price" id="" className="bg-black outline-blue-400 p-5 rounded-3xl  text-white" value={price} onChange={e => setPrice(Number(e.target.value))}/>
                         </div>
                         <div className="flex-row space-x-16 my-2">
@@ -393,19 +414,43 @@ export default function ItemsComponent(props: { name: any; menuActive: any }){
                                     <option value={c.category} key={i}>{c.category}</option>
                                 ))}
                             </select>
-                        </div>
-                        <div className="flex-row space-x-16 justify-center items-center my-2">
-                            {/* Image */}
-                            <input type="file" name="image" id="" accept="image/**" onChange={handleImage}/>
-                        </div>
-                        <div className="flex-row space-x-16 justify-center items-center my-2">
-                            {/* description */}
-                            <textarea name="description" id="" value={desc} onChange={(e) => setDesc(e.target.value)} cols={30} rows={10} className={`bg-black w-[40vw] outline-blue-400 p-5 text-white rounded-md`} placeholder="Enter description"></textarea>
-                        </div>
-                        <div className="flex-row self-center my-2">
-                            <button type="submit" className={`py-4 px-10 bg-blue-400 rounded-lg mb-2`} onClick={submitForm}>Add</button>
-                        </div>
-                    </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                {/* Compatibility */}
+                                <label htmlFor="compatibility">Compatibility</label>
+                            </Col>
+                            <Col xs={5}>
+                                <select name="compatibility" id="compatibility" className="text-black" value={compatibility} onChange={handleCompatibility}>
+                                    <option className="overflow-y">Compatible Processor</option>
+                                    <option value="intel,amd">Unspecified</option>
+                                    <option value="intel">Intel</option>
+                                    <option value="amd">AMD</option>
+                                </select>
+                            </Col>
+                        </Row>
+                        <Row className="my-2">
+                            <Col xs={3}>
+                                <label htmlFor="image">File Image</label>
+                            </Col>
+                            <Col>
+                                {/* Image */}
+                                <input type="file" name="image" id="image" accept="image/**" onChange={handleImage}/>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                {/* description */}
+                                <textarea name="description" id="" value={desc} onChange={(e) => setDesc(e.target.value)} cols={30} rows={10} className={`bg-black w-full outline-blue-400 p-2 text-white rounded-md`} placeholder="Enter description"></textarea>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col className="flex justify-center">
+                                <button type="submit" className={`py-4 px-10 bg-blue-400 rounded-lg mb-2`} onClick={submitForm}>Add</button>
+                            </Col>
+                        </Row>
+                    </Container>
                 </Modal.Body>
                 <Modal.Footer className="">
                     <Button variant="primary" className="text-black float-right mr-5 mt-3 bg-white text-2xl p-2 rounded-md" onClick={buttonClick}>Close</Button>
